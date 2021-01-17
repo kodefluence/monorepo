@@ -10,10 +10,27 @@ type Command struct {
 	rootCmd *cobra.Command
 }
 
-// Fabricate root command
-func Fabricate() *Command {
+// Fabricate monorepo command, it just get the first parameters of configs.
+func Fabricate(configs ...Config) *Command {
+	config := Config{
+		Name:  "monorepo",
+		Short: "A placeholder you need to actually change it",
+	}
+
+	if len(configs) > 0 {
+		config.Name = configs[0].Name
+		config.Short = configs[0].Short
+	}
+
 	return &Command{
-		rootCmd: newRoot(),
+		rootCmd: &cobra.Command{
+			Use:     config.Name,
+			Short:   config.Short,
+			Example: config.Name,
+			Run: func(cmd *cobra.Command, args []string) {
+				_ = cmd.Help()
+			},
+		},
 	}
 }
 

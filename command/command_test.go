@@ -20,6 +20,15 @@ func TestCommand(t *testing.T) {
 		assert.Nil(t, cmd.Execute())
 	})
 
+	t.Run("custom", func(t *testing.T) {
+		cmd := command.Fabricate(command.Config{
+			Name:  "altair",
+			Short: "Open Source API-Gateway",
+		})
+		cmd.SetArgs([]string{"altair"})
+		assert.Nil(t, cmd.Execute())
+	})
+
 	t.Run("others", func(t *testing.T) {
 		cmd := command.Fabricate()
 		cmd.SetArgs([]string{"others"})
