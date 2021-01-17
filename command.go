@@ -2,7 +2,7 @@ package monorepo
 
 //go:generate mockgen -source=./command.go -destination=./monomock/command_mock.go -package monomock
 
-// Command CLI command bearer of coronator
+// Command CLI command bearer of monorepo
 type Command interface {
 	InjectCommand(scaffold ...CommandScaffold)
 }

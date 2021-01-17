@@ -14,9 +14,9 @@ func TestCommand(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
 
-	t.Run("coronator", func(t *testing.T) {
+	t.Run("monorepo", func(t *testing.T) {
 		cmd := command.Fabricate()
-		cmd.SetArgs([]string{"coronator"})
+		cmd.SetArgs([]string{"monorepo"})
 		assert.Nil(t, cmd.Execute())
 	})
 

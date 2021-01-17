@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Command manage all command in coronator
+// Command manage all command in monorepo
 type Command struct {
 	rootCmd *cobra.Command
 }
