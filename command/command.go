@@ -1,7 +1,7 @@
 package command
 
 import (
-	"github.com/coronatorid/core-onator/provider"
+	"github.com/codefluence-x/monorepo"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ func (c *Command) Execute() error {
 }
 
 // InjectCommand inject new command into command list
-func (c *Command) InjectCommand(scaffolds ...provider.CommandScaffold) {
+func (c *Command) InjectCommand(scaffolds ...monorepo.CommandScaffold) {
 	for _, scaffold := range scaffolds {
 		// Intendedly assign this variable
 		scaffoldRunFunction := scaffold.Run
