@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/codefluence-x/monorepo/exception"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // FabricateMySQL will fabricate mysql connection and wrap it into SQL interfaces
