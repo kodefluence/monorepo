@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/codefluence-x/monorepo/command"
-	"github.com/codefluence-x/monorepo/monomock"
+	"github.com/codefluence-x/monorepo/command/mock"
 	"github.com/golang/mock/gomock"
 
 	"github.com/stretchr/testify/assert"
@@ -33,7 +33,7 @@ func TestCommand(t *testing.T) {
 		cmd := command.Fabricate()
 		cmd.SetArgs([]string{"others"})
 
-		scaffolding := monomock.NewMockCommandScaffold(mockCtrl)
+		scaffolding := mock.NewMockScaffold(mockCtrl)
 
 		scaffolding.EXPECT().Use().Return("others")
 		scaffolding.EXPECT().Short().Return("Others command")

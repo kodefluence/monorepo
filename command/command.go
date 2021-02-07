@@ -1,9 +1,18 @@
 package command
 
 import (
-	"github.com/codefluence-x/monorepo"
 	"github.com/spf13/cobra"
 )
+
+//go:generate mockgen -source=./command.go -destination=./mock/mock.go -package mock
+
+// Scaffold use for standard of creating CLI command
+type Scaffold interface {
+	Use() string
+	Example() string
+	Short() string
+	Run(args []string)
+}
 
 // Command manage all command in monorepo
 type Command struct {
@@ -45,7 +54,7 @@ func (c *Command) Execute() error {
 }
 
 // InjectCommand inject new command into command list
-func (c *Command) InjectCommand(scaffolds ...monorepo.CommandScaffold) {
+func (c *Command) InjectCommand(scaffolds ...Scaffold) {
 	for _, scaffold := range scaffolds {
 		// Intendedly assign this variable
 		scaffoldRunFunction := scaffold.Run
