@@ -1,4 +1,4 @@
-package adapter
+package db
 
 import (
 	"database/sql"
@@ -7,18 +7,18 @@ import (
 	"github.com/codefluence-x/monorepo/kontext"
 )
 
-// A DBAdapter for golang sql
-type DBAdapter struct {
+// An Adapter for golang sql
+type Adapter struct {
 	db *sql.DB
 }
 
-// AdaptDB adapting golang sql.DB
-func AdaptDB(db *sql.DB) DB {
-	return &DBAdapter{db: db}
+// Adapt adapting golang sql.DB
+func Adapt(db *sql.DB) DB {
+	return &Adapter{db: db}
 }
 
 // Transaction wrap mysql transaction into a bit of simpler way
-func (d *DBAdapter) Transaction(ctx kontext.Context, transactionKey string, f func(tx TX) exception.Exception) exception.Exception {
+func (d *Adapter) Transaction(ctx kontext.Context, transactionKey string, f func(tx TX) exception.Exception) exception.Exception {
 	return runWithSQLAnalyzer(ctx, "db", "Transaction", func() exception.Exception {
 		tx, err := d.db.BeginTx(ctx.Ctx(), &sql.TxOptions{})
 		if err != nil {
@@ -41,7 +41,7 @@ func (d *DBAdapter) Transaction(ctx kontext.Context, transactionKey string, f fu
 }
 
 // ExecContext wrap sql ExecContext function
-func (d *DBAdapter) ExecContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Result, exception.Exception) {
+func (d *Adapter) ExecContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Result, exception.Exception) {
 	var result sql.Result
 	var err error
 	var exc exception.Exception
@@ -59,7 +59,7 @@ func (d *DBAdapter) ExecContext(ctx kontext.Context, queryKey, query string, arg
 }
 
 // QueryContext wrap sql QueryContext function
-func (d *DBAdapter) QueryContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Rows, exception.Exception) {
+func (d *Adapter) QueryContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Rows, exception.Exception) {
 	var rows *sql.Rows
 	var err error
 	var exc exception.Exception
@@ -79,7 +79,7 @@ func (d *DBAdapter) QueryContext(ctx kontext.Context, queryKey, query string, ar
 }
 
 // QueryRowContext wrap sql QueryRowContext function
-func (d *DBAdapter) QueryRowContext(ctx kontext.Context, queryKey, query string, args ...interface{}) Row {
+func (d *Adapter) QueryRowContext(ctx kontext.Context, queryKey, query string, args ...interface{}) Row {
 	var row *sql.Row
 
 	_ = runWithSQLAnalyzer(ctx, "db", "QueryRowContext", func() exception.Exception {
