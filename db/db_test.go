@@ -19,10 +19,19 @@ func TestIntegrationDB(t *testing.T) {
 				Name:     "test_database",
 			}
 
-			db, err := db.FabricateMySQL(config, db.WithConnMaxLifetime(time.Second), db.WithMaxIdleConn(100), db.WithMaxOpenConn(100))
-
-			assert.NotNil(t, db)
+			sqldb, err := db.FabricateMySQL("main_db", config, db.WithConnMaxLifetime(time.Second), db.WithMaxIdleConn(100), db.WithMaxOpenConn(100))
+			assert.NotNil(t, sqldb)
 			assert.Nil(t, err)
+
+			sqldb, err = db.FabricateMySQL("main_db", config, db.WithConnMaxLifetime(time.Second), db.WithMaxIdleConn(100), db.WithMaxOpenConn(100))
+			assert.NotNil(t, sqldb)
+			assert.Nil(t, err)
+
+			sqldb, err = db.FabricateMySQL("secondary_db", config, db.WithConnMaxLifetime(time.Second), db.WithMaxIdleConn(100), db.WithMaxOpenConn(100))
+			assert.NotNil(t, sqldb)
+			assert.Nil(t, err)
+
+			assert.Equal(t, 0, len(db.CloseAll()))
 		})
 	})
 }
