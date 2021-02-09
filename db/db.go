@@ -7,6 +7,7 @@ import (
 
 // DB is database interface wrapper for *sql.DB
 type DB interface {
+	Ping(ktx kontext.Context) exception.Exception
 	Transaction(ctx kontext.Context, transactionKey string, f func(tx TX) exception.Exception) exception.Exception
 	ExecContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Result, exception.Exception)
 	QueryContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Rows, exception.Exception)

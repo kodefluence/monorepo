@@ -15,6 +15,34 @@ import (
 func TestAdapter(t *testing.T) {
 	ktx := kontext.Fabricate()
 
+	t.Run("Ping", func(t *testing.T) {
+		t.Run("When ping success it will return nil", func(t *testing.T) {
+			sqldb, mockDB, err := sqlmock.New(sqlmock.MonitorPingsOption(true))
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+			defer sqldb.Close()
+
+			mockDB.ExpectPing()
+
+			sql := db.Adapt(sqldb)
+			assert.Nil(t, sql.Ping(ktx))
+		})
+
+		t.Run("When ping failed it will return exception", func(t *testing.T) {
+			sqldb, mockDB, err := sqlmock.New(sqlmock.MonitorPingsOption(true))
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+			defer sqldb.Close()
+
+			mockDB.ExpectPing().WillReturnError(errors.New("unexpected error"))
+
+			sql := db.Adapt(sqldb)
+			assert.NotNil(t, sql.Ping(ktx))
+		})
+	})
+
 	t.Run("QueryRowContext", func(t *testing.T) {
 		t.Run("When querying done it will return db.Row and scan the value", func(t *testing.T) {
 
