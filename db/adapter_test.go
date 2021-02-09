@@ -213,4 +213,67 @@ func TestAdapter(t *testing.T) {
 		})
 
 	})
+
+	t.Run("ExecContext", func(t *testing.T) {
+		t.Run("When query execution is done it will return results", func(t *testing.T) {
+			sqldb, mockDB, err := sqlmock.New(sqlmock.MonitorPingsOption(true))
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+			defer sqldb.Close()
+
+			mockDB.ExpectExec(`insert into users \(1\) values\(id\)`).WillReturnResult(sqlmock.NewResult(1, 1))
+
+			sql := db.Adapt(sqldb)
+			result, err := sql.ExecContext(ktx, "test-query-1", "insert into users (1) values(id)")
+			assert.Nil(t, err)
+
+			lastID, err := result.LastInsertId()
+			assert.Equal(t, int64(1), lastID)
+			assert.Nil(t, err)
+
+			rowsAffected, err := result.RowsAffected()
+			assert.Equal(t, int64(1), rowsAffected)
+			assert.Nil(t, err)
+
+			assert.Nil(t, mockDB.ExpectationsWereMet())
+		})
+
+		t.Run("When query execution error it will return error", func(t *testing.T) {
+			sqldb, mockDB, err := sqlmock.New(sqlmock.MonitorPingsOption(true))
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+			defer sqldb.Close()
+
+			mockDB.ExpectExec(`insert into users \(1\) values\(id\)`).WillReturnError(errors.New("unexpected error"))
+
+			sql := db.Adapt(sqldb)
+			_, err = sql.ExecContext(ktx, "test-query-1", "insert into users (1) values(id)")
+			assert.NotNil(t, err)
+			assert.Nil(t, mockDB.ExpectationsWereMet())
+		})
+
+		t.Run("When query execution is done it will return results, but it will return error if it failed to get last insert id or rows affected", func(t *testing.T) {
+			sqldb, mockDB, err := sqlmock.New(sqlmock.MonitorPingsOption(true))
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+			defer sqldb.Close()
+
+			mockDB.ExpectExec(`insert into users \(1\) values\(id\)`).WillReturnResult(sqlmock.NewErrorResult(errors.New("unexpected")))
+
+			sql := db.Adapt(sqldb)
+			result, err := sql.ExecContext(ktx, "test-query-1", "insert into users (1) values(id)")
+			assert.Nil(t, err)
+
+			_, err = result.LastInsertId()
+			assert.NotNil(t, err)
+
+			_, err = result.RowsAffected()
+			assert.NotNil(t, err)
+
+			assert.Nil(t, mockDB.ExpectationsWereMet())
+		})
+	})
 }

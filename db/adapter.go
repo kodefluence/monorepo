@@ -18,9 +18,9 @@ func Adapt(db *sql.DB) DB {
 }
 
 // Transaction wrap mysql transaction into a bit of simpler way
-func (d *Adapter) Transaction(ctx kontext.Context, transactionKey string, f func(tx TX) exception.Exception) exception.Exception {
-	return runWithSQLAnalyzer(ctx, "db", "Transaction", func() exception.Exception {
-		tx, err := d.db.BeginTx(ctx.Ctx(), &sql.TxOptions{})
+func (d *Adapter) Transaction(ktx kontext.Context, transactionKey string, f func(tx TX) exception.Exception) exception.Exception {
+	return runWithSQLAnalyzer(ktx, "db", "Transaction", func() exception.Exception {
+		tx, err := d.db.BeginTx(ktx.Ctx(), &sql.TxOptions{})
 		if err != nil {
 			return exception.Throw(err)
 		}
@@ -41,13 +41,13 @@ func (d *Adapter) Transaction(ctx kontext.Context, transactionKey string, f func
 }
 
 // ExecContext wrap sql ExecContext function
-func (d *Adapter) ExecContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Result, exception.Exception) {
+func (d *Adapter) ExecContext(ktx kontext.Context, queryKey, query string, args ...interface{}) (Result, exception.Exception) {
 	var result sql.Result
 	var err error
 	var exc exception.Exception
 
-	exc = runWithSQLAnalyzer(ctx, "db", "ExecContext", func() exception.Exception {
-		result, err = d.db.ExecContext(ctx.Ctx(), query, args...)
+	exc = runWithSQLAnalyzer(ktx, "db", "ExecContext", func() exception.Exception {
+		result, err = d.db.ExecContext(ktx.Ctx(), query, args...)
 		if err != nil {
 			return exception.Throw(err)
 		}
@@ -59,13 +59,13 @@ func (d *Adapter) ExecContext(ctx kontext.Context, queryKey, query string, args 
 }
 
 // QueryContext wrap sql QueryContext function
-func (d *Adapter) QueryContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Rows, exception.Exception) {
+func (d *Adapter) QueryContext(ktx kontext.Context, queryKey, query string, args ...interface{}) (Rows, exception.Exception) {
 	var rows *sql.Rows
 	var err error
 	var exc exception.Exception
 
-	exc = runWithSQLAnalyzer(ctx, "db", "QueryContext", func() exception.Exception {
-		rows, err = d.db.QueryContext(ctx.Ctx(), query, args...)
+	exc = runWithSQLAnalyzer(ktx, "db", "QueryContext", func() exception.Exception {
+		rows, err = d.db.QueryContext(ktx.Ctx(), query, args...)
 		if err == sql.ErrNoRows {
 			return exception.Throw(err, exception.WithType(exception.NotFound))
 		} else if err != nil {
@@ -79,18 +79,18 @@ func (d *Adapter) QueryContext(ctx kontext.Context, queryKey, query string, args
 }
 
 // QueryRowContext wrap sql QueryRowContext function
-func (d *Adapter) QueryRowContext(ctx kontext.Context, queryKey, query string, args ...interface{}) Row {
+func (d *Adapter) QueryRowContext(ktx kontext.Context, queryKey, query string, args ...interface{}) Row {
 	var row *sql.Row
 
-	_ = runWithSQLAnalyzer(ctx, "db", "QueryRowContext", func() exception.Exception {
-		row = d.db.QueryRowContext(ctx.Ctx(), query, args...)
+	_ = runWithSQLAnalyzer(ktx, "db", "QueryRowContext", func() exception.Exception {
+		row = d.db.QueryRowContext(ktx.Ctx(), query, args...)
 		return nil
 	})
 
 	return AdaptRow(row)
 }
 
-func runWithSQLAnalyzer(ctx kontext.Context, executionLevel, function string, f func() exception.Exception) exception.Exception {
+func runWithSQLAnalyzer(ktx kontext.Context, executionLevel, function string, f func() exception.Exception) exception.Exception {
 	if err := f(); err != nil {
 		return err
 	}
