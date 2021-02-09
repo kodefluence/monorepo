@@ -25,7 +25,7 @@ func (d *Adapter) Transaction(ktx kontext.Context, transactionKey string, f func
 			return exception.Throw(err)
 		}
 
-		adaptedTx := &TXAdapter{tx: tx}
+		adaptedTx := AdaptTXAdapter(tx)
 		if err := f(adaptedTx); err != nil {
 			_ = tx.Rollback()
 			return exception.Throw(err)

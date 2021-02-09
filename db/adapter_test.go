@@ -9,14 +9,10 @@ import (
 	"github.com/codefluence-x/monorepo/db"
 	"github.com/codefluence-x/monorepo/exception"
 	"github.com/codefluence-x/monorepo/kontext"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAdapter(t *testing.T) {
-	mockCtrl := gomock.NewController(t)
-	defer mockCtrl.Finish()
-
 	ktx := kontext.Fabricate()
 
 	t.Run("QueryRowContext", func(t *testing.T) {
