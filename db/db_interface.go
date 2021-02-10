@@ -47,7 +47,7 @@ func CloseAll() []exception.Exception {
 
 	instanceList.Range(func(key, value interface{}) bool {
 		if err := value.(*sql.DB).Close(); err != nil {
-			excs = append(excs, exception.Throw(err, exception.WithTitle("error closing mysql connection"), exception.WithDetail(fmt.Sprintf("database: %s", key.(string)))))
+			excs = append(excs, exception.Throw(err, exception.WithTitle("error closing mysql connection"), exception.WithDetail(fmt.Sprintf("instance name: %s", key.(string)))))
 		}
 
 		return true
