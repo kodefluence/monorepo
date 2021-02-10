@@ -5,6 +5,8 @@ import (
 	"github.com/codefluence-x/monorepo/kontext"
 )
 
+//go:generate mockgen -source=./db.go -destination=./mock/db_mock.go -package mock
+
 // DB is database interface wrapper for *sql.DB
 type DB interface {
 	Ping(ktx kontext.Context) exception.Exception
