@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/codefluence-x/monorepo/command"
-	"github.com/codefluence-x/monorepo/monomock"
+	"github.com/codefluence-x/monorepo/command/mock"
 	"github.com/golang/mock/gomock"
 
 	"github.com/stretchr/testify/assert"
@@ -14,9 +14,18 @@ func TestCommand(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
 
-	t.Run("coronator", func(t *testing.T) {
+	t.Run("monorepo", func(t *testing.T) {
 		cmd := command.Fabricate()
-		cmd.SetArgs([]string{"coronator"})
+		cmd.SetArgs([]string{"monorepo"})
+		assert.Nil(t, cmd.Execute())
+	})
+
+	t.Run("custom", func(t *testing.T) {
+		cmd := command.Fabricate(command.Config{
+			Name:  "altair",
+			Short: "Open Source API-Gateway",
+		})
+		cmd.SetArgs([]string{"altair"})
 		assert.Nil(t, cmd.Execute())
 	})
 
@@ -24,7 +33,7 @@ func TestCommand(t *testing.T) {
 		cmd := command.Fabricate()
 		cmd.SetArgs([]string{"others"})
 
-		scaffolding := monomock.NewMockCommandScaffold(mockCtrl)
+		scaffolding := mock.NewMockScaffold(mockCtrl)
 
 		scaffolding.EXPECT().Use().Return("others")
 		scaffolding.EXPECT().Short().Return("Others command")
