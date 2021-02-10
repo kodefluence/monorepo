@@ -15,7 +15,7 @@ var instanceList = &sync.Map{}
 
 // FabricateMySQL will fabricate mysql connection and wrap it into SQL interfaces
 func FabricateMySQL(instanceName string, config Config, opts ...Option) (DB, exception.Exception) {
-	if val, ok := instanceList.Load(instanceName); ok {
+	if val, ok := instanceList.Load(fmt.Sprintf("mysql-%s", instanceName)); ok {
 		return Adapt(val.(*sql.DB)), nil
 	}
 
@@ -36,7 +36,7 @@ func FabricateMySQL(instanceName string, config Config, opts ...Option) (DB, exc
 	db.SetMaxIdleConns(config.maxIdleConn)
 	db.SetMaxOpenConns(config.maxOpenConn)
 
-	instanceList.Store(instanceName, db)
+	instanceList.Store(fmt.Sprintf("mysql-%s", instanceName), db)
 
 	return Adapt(db), nil
 }
