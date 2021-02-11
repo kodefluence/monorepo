@@ -10,10 +10,13 @@ import (
 // DB is database interface wrapper for *sql.DB
 type DB interface {
 	Ping(ktx kontext.Context) exception.Exception
+	Transactionable
+	TX
+}
+
+// Transactionable is wrapper to create transaction process
+type Transactionable interface {
 	Transaction(ctx kontext.Context, transactionKey string, f func(tx TX) exception.Exception) exception.Exception
-	ExecContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Result, exception.Exception)
-	QueryContext(ctx kontext.Context, queryKey, query string, args ...interface{}) (Rows, exception.Exception)
-	QueryRowContext(ctx kontext.Context, queryKey, query string, args ...interface{}) Row
 }
 
 // TX is database transaction

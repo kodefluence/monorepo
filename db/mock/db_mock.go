@@ -122,6 +122,43 @@ func (mr *MockDBMockRecorder) QueryRowContext(ctx, queryKey, query interface{}, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryRowContext", reflect.TypeOf((*MockDB)(nil).QueryRowContext), varargs...)
 }
 
+// MockTransactionable is a mock of Transactionable interface
+type MockTransactionable struct {
+	ctrl     *gomock.Controller
+	recorder *MockTransactionableMockRecorder
+}
+
+// MockTransactionableMockRecorder is the mock recorder for MockTransactionable
+type MockTransactionableMockRecorder struct {
+	mock *MockTransactionable
+}
+
+// NewMockTransactionable creates a new mock instance
+func NewMockTransactionable(ctrl *gomock.Controller) *MockTransactionable {
+	mock := &MockTransactionable{ctrl: ctrl}
+	mock.recorder = &MockTransactionableMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockTransactionable) EXPECT() *MockTransactionableMockRecorder {
+	return m.recorder
+}
+
+// Transaction mocks base method
+func (m *MockTransactionable) Transaction(ctx kontext.Context, transactionKey string, f func(db.TX) exception.Exception) exception.Exception {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Transaction", ctx, transactionKey, f)
+	ret0, _ := ret[0].(exception.Exception)
+	return ret0
+}
+
+// Transaction indicates an expected call of Transaction
+func (mr *MockTransactionableMockRecorder) Transaction(ctx, transactionKey, f interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Transaction", reflect.TypeOf((*MockTransactionable)(nil).Transaction), ctx, transactionKey, f)
+}
+
 // MockTX is a mock of TX interface
 type MockTX struct {
 	ctrl     *gomock.Controller
