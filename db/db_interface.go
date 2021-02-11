@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"sync"
 
@@ -39,6 +40,15 @@ func FabricateMySQL(instanceName string, config Config, opts ...Option) (DB, exc
 	instanceList.Store(fmt.Sprintf("mysql-%s", instanceName), db)
 
 	return Adapt(db), nil
+}
+
+// GetInstance that already fabricated before as an sql.DB
+func GetInstance(instanceName string) (*sql.DB, exception.Exception) {
+	if val, ok := instanceList.Load(fmt.Sprintf("mysql-%s", instanceName)); ok {
+		return val.(*sql.DB), nil
+	}
+
+	return nil, exception.Throw(errors.New("unexpected error"), exception.WithType(exception.NotFound))
 }
 
 // CloseAll initiated mysql connection

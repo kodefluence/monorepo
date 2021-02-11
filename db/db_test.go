@@ -27,6 +27,14 @@ func TestIntegrationDB(t *testing.T) {
 			assert.NotNil(t, sqldb)
 			assert.Nil(t, err)
 
+			sqldbvalue, err := db.GetInstance("main_db")
+			assert.NotNil(t, sqldbvalue)
+			assert.Nil(t, err)
+
+			sqldbvalue, err = db.GetInstance("no_db")
+			assert.Nil(t, sqldbvalue)
+			assert.NotNil(t, err)
+
 			sqldb, err = db.FabricateMySQL("secondary_db", config, db.WithConnMaxLifetime(time.Second), db.WithMaxIdleConn(100), db.WithMaxOpenConn(100))
 			assert.NotNil(t, sqldb)
 			assert.Nil(t, err)
