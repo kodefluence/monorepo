@@ -12,8 +12,10 @@ const (
 	Duplicated
 	// BadInput throwed when there is unexpected input received from the caller
 	BadInput
-	// Unauthorized throwed when there is unexpected access from the caller
+	// Unauthorized throwed when there is unauthorized access from the caller
 	Unauthorized
+	// Forbidden throwd when there is unexpected access from the caller
+	Forbidden
 )
 
 func (t Type) String() string {
@@ -23,5 +25,6 @@ func (t Type) String() string {
 		"duplicated",
 		"bad input",
 		"unauthorized",
+		"forbidden",
 	}[t]
 }
