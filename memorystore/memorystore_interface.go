@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/bradfitz/gomemcache/memcache"
-	"github.com/codefluence-x/monorepo/exception"
+	"github.com/kodefluence/monorepo/exception"
 )
 
 var instanceList = &sync.Map{}

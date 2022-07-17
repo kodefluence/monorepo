@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 
-	"github.com/codefluence-x/monorepo/exception"
+	"github.com/kodefluence/monorepo/exception"
 )
 
 // RowAdapter wrap single sql row

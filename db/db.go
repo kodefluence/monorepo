@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/codefluence-x/monorepo/exception"
-	"github.com/codefluence-x/monorepo/kontext"
+	"github.com/kodefluence/monorepo/exception"
+	"github.com/kodefluence/monorepo/kontext"
 )
 
 //go:generate mockgen -source=./db.go -destination=./mock/db_mock.go -package mock

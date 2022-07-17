@@ -3,8 +3,8 @@ package memorystore
 import (
 	"time"
 
-	"github.com/codefluence-x/monorepo/exception"
-	"github.com/codefluence-x/monorepo/kontext"
+	"github.com/kodefluence/monorepo/exception"
+	"github.com/kodefluence/monorepo/kontext"
 )
 
 // MemoryStore is interface to connect to cache infrastructure

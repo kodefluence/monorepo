@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/codefluence-x/monorepo/exception"
+	"github.com/kodefluence/monorepo/exception"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -1,4 +1,4 @@
-module github.com/codefluence-x/monorepo
+module github.com/kodefluence/monorepo
 
 go 1.14
 

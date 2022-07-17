@@ -3,9 +3,9 @@ package command_test
 import (
 	"testing"
 
-	"github.com/codefluence-x/monorepo/command"
-	"github.com/codefluence-x/monorepo/command/mock"
 	"github.com/golang/mock/gomock"
+	"github.com/kodefluence/monorepo/command"
+	"github.com/kodefluence/monorepo/command/mock"
 
 	"github.com/stretchr/testify/assert"
 )

@@ -3,8 +3,8 @@ package db
 import (
 	"database/sql"
 
-	"github.com/codefluence-x/monorepo/exception"
-	"github.com/codefluence-x/monorepo/kontext"
+	"github.com/kodefluence/monorepo/exception"
+	"github.com/kodefluence/monorepo/kontext"
 )
 
 // An Adapter for golang sql

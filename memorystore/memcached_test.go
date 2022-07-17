@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/bradfitz/gomemcache/memcache"
-	"github.com/codefluence-x/monorepo/exception"
-	"github.com/codefluence-x/monorepo/kontext"
-	"github.com/codefluence-x/monorepo/memorystore"
-	"github.com/codefluence-x/monorepo/memorystore/mock"
 	"github.com/golang/mock/gomock"
+	"github.com/kodefluence/monorepo/exception"
+	"github.com/kodefluence/monorepo/kontext"
+	"github.com/kodefluence/monorepo/memorystore"
+	"github.com/kodefluence/monorepo/memorystore/mock"
 	"github.com/stretchr/testify/assert"
 )
 

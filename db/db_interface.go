@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/codefluence-x/monorepo/exception"
+	"github.com/kodefluence/monorepo/exception"
 
 	// Import mysql driver
 	_ "github.com/go-sql-driver/mysql"

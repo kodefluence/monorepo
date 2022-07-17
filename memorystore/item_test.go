@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codefluence-x/monorepo/memorystore"
+	"github.com/kodefluence/monorepo/memorystore"
 	"github.com/stretchr/testify/assert"
 )
 

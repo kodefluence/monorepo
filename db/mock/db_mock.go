@@ -5,9 +5,9 @@
 package mock
 
 import (
-	db "github.com/codefluence-x/monorepo/db"
-	exception "github.com/codefluence-x/monorepo/exception"
-	kontext "github.com/codefluence-x/monorepo/kontext"
+	db "github.com/kodefluence/monorepo/db"
+	exception "github.com/kodefluence/monorepo/exception"
+	kontext "github.com/kodefluence/monorepo/kontext"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

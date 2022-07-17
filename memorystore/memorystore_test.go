@@ -3,7 +3,7 @@ package memorystore_test
 import (
 	"testing"
 
-	"github.com/codefluence-x/monorepo/memorystore"
+	"github.com/kodefluence/monorepo/memorystore"
 	"github.com/stretchr/testify/assert"
 )
 
