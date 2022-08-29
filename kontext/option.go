@@ -1,6 +1,8 @@
 package kontext
 
-import "context"
+import (
+	"context"
+)
 
 // A Config for Context creation
 type Config struct {
