@@ -10,6 +10,14 @@ func WithData(data interface{}) Option {
 	}
 }
 
+func WithErrors(errors Errors) Option {
+	return func(b *Body) {
+		if errors != nil {
+			b.Errors = errors
+		}
+	}
+}
+
 func WithException(code string, status int, exc exception.Exception) Option {
 	return WithExceptionMeta(code, status, exc, nil)
 }
