@@ -1,6 +1,8 @@
 package db
 
 import (
+	"database/sql"
+
 	"github.com/kodefluence/monorepo/exception"
 	"github.com/kodefluence/monorepo/kontext"
 )
@@ -12,6 +14,7 @@ type DB interface {
 	Ping(ktx kontext.Context) exception.Exception
 	Transactionable
 	TX
+	Eject() *sql.DB
 }
 
 // Transactionable is wrapper to create transaction process

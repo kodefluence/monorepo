@@ -105,3 +105,8 @@ func runWithSQLAnalyzer(ktx kontext.Context, executionLevel, function string, f 
 	}
 	return nil
 }
+
+// Eject sql.DB out of db adapter
+func (a *Adapter) Eject() *sql.DB {
+	return a.db
+}
