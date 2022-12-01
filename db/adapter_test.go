@@ -43,6 +43,16 @@ func TestAdapter(t *testing.T) {
 		})
 	})
 
+	t.Run("Eject", func(t *testing.T) {
+		t.Run("When ejected it return *sql.DB instance", func(t *testing.T) {
+			sqldb, _, _ := sqlmock.New(sqlmock.MonitorPingsOption(true))
+			defer sqldb.Close()
+
+			sql := db.Adapt(sqldb)
+			assert.Equal(t, sqldb, sql.Eject())
+		})
+	})
+
 	t.Run("QueryRowContext", func(t *testing.T) {
 		t.Run("When querying done it will return db.Row and scan the value", func(t *testing.T) {
 
