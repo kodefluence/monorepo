@@ -80,4 +80,99 @@ func TestJSONAPI(t *testing.T) {
 
 		assert.Equal(t, 500, response.HTTPStatus())
 	})
+
+	t.Run("Error with source pointer", func(t *testing.T) {
+		response := jsonapi.BuildResponse(
+			jsonapi.WithException("ERR422", http.StatusUnprocessableEntity, exception.Throw(
+				errors.New("validation error"),
+				exception.WithDetail("The name field is required"),
+				exception.WithTitle("Validation Error"),
+			), jsonapi.WithSourcePointer("/data/attributes/name")),
+		)
+
+		b, _ := json.Marshal(response)
+		assert.Contains(t, string(b), "\"source\":{\"pointer\":\"/data/attributes/name\"}")
+		assert.Equal(t, http.StatusUnprocessableEntity, response.HTTPStatus())
+	})
+
+	t.Run("Error with source parameter", func(t *testing.T) {
+		response := jsonapi.BuildResponse(
+			jsonapi.WithException("ERR400", http.StatusBadRequest, exception.Throw(
+				errors.New("invalid parameter"),
+				exception.WithDetail("The limit parameter must be a positive integer"),
+				exception.WithTitle("Invalid Parameter"),
+			), jsonapi.WithSourceParameter("limit")),
+		)
+
+		b, _ := json.Marshal(response)
+		assert.Contains(t, string(b), "\"source\":{\"parameter\":\"limit\"}")
+		assert.Equal(t, http.StatusBadRequest, response.HTTPStatus())
+	})
+
+	t.Run("Error with source header", func(t *testing.T) {
+		response := jsonapi.BuildResponse(
+			jsonapi.WithException("ERR401", http.StatusUnauthorized, exception.Throw(
+				errors.New("missing authorization"),
+				exception.WithDetail("The Authorization header is missing"),
+				exception.WithTitle("Unauthorized"),
+			), jsonapi.WithSourceHeader("Authorization")),
+		)
+
+		b, _ := json.Marshal(response)
+		assert.Contains(t, string(b), "\"source\":{\"header\":\"Authorization\"}")
+		assert.Equal(t, http.StatusUnauthorized, response.HTTPStatus())
+	})
+
+	t.Run("Error with source and meta", func(t *testing.T) {
+		response := jsonapi.BuildResponse(
+			jsonapi.WithExceptionMeta("ERR422", http.StatusUnprocessableEntity, exception.Throw(
+				errors.New("validation error"),
+				exception.WithDetail("The email format is invalid"),
+				exception.WithTitle("Validation Error"),
+			), jsonapi.Meta{
+				"field":  "email",
+				"format": "email",
+			}, jsonapi.WithSourcePointer("/data/attributes/email")),
+		)
+
+		b, _ := json.Marshal(response)
+		assert.Contains(t, string(b), "\"source\":{\"pointer\":\"/data/attributes/email\"}")
+		assert.Contains(t, string(b), "\"meta\":{\"field\":\"email\",\"format\":\"email\"}")
+		assert.Equal(t, http.StatusUnprocessableEntity, response.HTTPStatus())
+	})
+
+	t.Run("Multiple source options should be handled correctly", func(t *testing.T) {
+		// Only the last source option should be used when multiple are provided
+		response := jsonapi.BuildResponse(
+			jsonapi.WithException("ERR400", http.StatusBadRequest, exception.Throw(
+				errors.New("invalid parameter"),
+				exception.WithDetail("Invalid request"),
+				exception.WithTitle("Bad Request"),
+			),
+				jsonapi.WithSourcePointer("/data/attributes/name"),
+				jsonapi.WithSourceParameter("id"), // This should override the pointer
+			),
+		)
+
+		b, _ := json.Marshal(response)
+		assert.Contains(t, string(b), "\"source\":{\"pointer\":\"/data/attributes/name\",\"parameter\":\"id\"}")
+	})
+
+	t.Run("Using all source options together", func(t *testing.T) {
+		response := jsonapi.BuildResponse(
+			jsonapi.WithException("ERR400", http.StatusBadRequest, exception.Throw(
+				errors.New("complex error"),
+				exception.WithDetail("Complex error with multiple sources"),
+				exception.WithTitle("Bad Request"),
+			),
+				jsonapi.WithSourcePointer("/data"),
+				jsonapi.WithSourceParameter("sort"),
+				jsonapi.WithSourceHeader("X-Custom"), // This should be the only one that remains
+			),
+		)
+
+		b, _ := json.Marshal(response)
+		// The source should contain only the header field since it was the last one set
+		assert.Contains(t, string(b), "\"source\":{\"pointer\":\"/data\",\"parameter\":\"sort\",\"header\":\"X-Custom\"}")
+	})
 }
