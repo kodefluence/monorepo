@@ -150,7 +150,7 @@ func TestJSONAPI(t *testing.T) {
 				exception.WithTitle("Bad Request"),
 			),
 				jsonapi.WithSourcePointer("/data/attributes/name"),
-				jsonapi.WithSourceParameter("id"), // This should override the pointer
+				jsonapi.WithSourceParameter("id"),
 			),
 		)
 
@@ -167,7 +167,7 @@ func TestJSONAPI(t *testing.T) {
 			),
 				jsonapi.WithSourcePointer("/data"),
 				jsonapi.WithSourceParameter("sort"),
-				jsonapi.WithSourceHeader("X-Custom"), // This should be the only one that remains
+				jsonapi.WithSourceHeader("X-Custom"),
 			),
 		)
 
